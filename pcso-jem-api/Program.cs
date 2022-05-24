@@ -28,6 +28,7 @@ app.MapGet("/todoitems/{id}", async (int id, TodoDb db) =>
 
 app.MapPost("/todoitems", async (Todo todo, TodoDb db) =>
 {
+    todo.Created = DateTime.Now;
     db.Todos.Add(todo);
     await db.SaveChangesAsync();
 
@@ -49,6 +50,18 @@ app.MapPut("/todoitems/{id}", async (int id, Todo inputTodo, TodoDb db) =>
 });
 
 app.MapDelete("/todoitems/{id}", async (int id, TodoDb db) =>
+{
+    if (await db.Todos.FindAsync(id) is Todo todo)
+    {
+        db.Todos.Remove(todo);
+        await db.SaveChangesAsync();
+        return Results.Ok(todo);
+    }
+
+    return Results.NotFound();
+});
+
+app.MapDelete("/todoitems", async (TodoDb db) =>
 {
     if ((db?.Todos?.Count() ?? 0) < 1)
         return Results.Ok;
