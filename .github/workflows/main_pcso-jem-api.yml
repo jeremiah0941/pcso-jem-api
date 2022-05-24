@@ -15,12 +15,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
+      
       - name: Build with dotnet
-         run:|
-              cd .\pcso-jem-api
-             dotnet build -c Release
-             dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: |
+          cd .\pcso-ali-api
+          dotnet build -c Release
+          dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
           
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
